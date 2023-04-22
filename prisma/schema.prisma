@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model kayttaja {
+  id                                                 Int           @id @default(autoincrement())
+  kayttajatunnus                                     String        @db.Text
+  salasana                                           String        @db.Text
+  viestiketju_viestiketju_lahettaja_idTokayttaja     viestiketju[] @relation("viestiketju_lahettaja_idTokayttaja")
+  viestiketju_viestiketju_vastaanottaja_idTokayttaja viestiketju[] @relation("viestiketju_vastaanottaja_idTokayttaja")
+}
+
+model viesti {
+  id             Int         @id @default(autoincrement())
+  viestiketju_id Int
+  sisalto        String      @db.Text
+  aika           DateTime    @default(now()) @db.Timestamp(0)
+  viestiketju    viestiketju @relation(fields: [viestiketju_id], references: [id], onDelete: Cascade, map: "viestiketju")
+
+  @@index([viestiketju_id], map: "viestiketju")
+}
+
+model viestiketju {
+  id                                              Int      @id @default(autoincrement())
+  lahettaja_id                                    Int
+  vastaanottaja_id                                Int
+  lahettaja                                       String   @db.Text
+  vastaanottaja                                   String   @db.Text
+  aikaleima                                       DateTime @default(now()) @db.Timestamp(0)
+  viesti                                          viesti[]
+  kayttaja_viestiketju_lahettaja_idTokayttaja     kayttaja @relation("viestiketju_lahettaja_idTokayttaja", fields: [lahettaja_id], references: [id], onDelete: Cascade, map: "lahettaja")
+  kayttaja_viestiketju_vastaanottaja_idTokayttaja kayttaja @relation("viestiketju_vastaanottaja_idTokayttaja", fields: [vastaanottaja_id], references: [id], onDelete: Cascade, map: "vastaanottaja")
+
+  @@index([lahettaja_id], map: "lahettaja")
+  @@index([vastaanottaja_id], map: "vastaanottaja")
+}
