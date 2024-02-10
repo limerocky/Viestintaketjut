@@ -1,1 +1,1 @@
-Selainpohjainen sovellus ylläpitämään viestintäketjuja.
+Selainpohjainen sovellus ylläpitämään viestiketjuja.
