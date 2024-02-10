@@ -1,1 +1,1 @@
-Kouluprojekti osoittaen osaamistani.
+Selainpohjainen sovellus ylläpitämään viestintäketjuja.
